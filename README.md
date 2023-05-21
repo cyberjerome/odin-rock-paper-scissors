@@ -24,6 +24,5 @@ This project is a simple implementation of the Rock Paper Scissors game in JavaS
 The project repository contains the following files:
 
 - `index.html`: The main HTML file that displays the user interface.
-- `style.css`: The CSS file that provides basic styling for the user interface.
 - `script.js`: The JavaScript file that contains the game logic and function definitions.
 - `README.md`: This README file providing an overview and instructions for the project.
