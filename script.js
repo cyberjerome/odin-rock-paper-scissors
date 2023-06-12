@@ -1,3 +1,14 @@
+let playerScore = 0;
+let computerScore = 0;
+
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach(button => {
+    button.addEventListener('click', function() {
+        playRound(button.id)
+    })
+})
+
 function getComputerChoice() {
     // Generate a random number between 0 and 2
     const randomNumber = Math.floor(Math.random() * 3);
@@ -5,69 +16,53 @@ function getComputerChoice() {
     // Use random number to determine the computer's choice
     switch(randomNumber) {
         case 0:
-            return "Rock";
+            return "rock";
         case 1:
-            return "Paper";
+            return "paper";
         case 2:
-            return "Scissors"
+            return "scissors";
     }
 
 }
 
-function playRound(playerSelection, computerSelection) {
-    // Convert playerSelection to lowercase for case-insensitive comparison
-    playerSelection = playerSelection.toLowerCase()
-    computerSelection = computerSelection.toLowerCase()
+function playRound(playerSelection) {
+    let computerSelection = getComputerChoice();
+    let result = "";
 
-    // Check for tie
-    if (playerSelection == computerSelection) {
-        return "It's a tie!";
-    }
-
-    // Check for player win conditions
     if (
-        (playerSelection === 'rock' && computerSelection === 'scissors') ||
-        (playerSelection === 'paper' && computerSelection === 'rock') ||
-        (playerSelection === 'scissors' && computerSelection === 'paper')
+        (playerSelection == 'rock' && computerSelection == 'scissors') ||
+        (playerSelection == 'paper' & computerSelection == 'rock') ||
+        (playerSelection == 'scissors' && computerSelection == 'paper')
     ) {
-        return `You Win! ${playerSelection} beats ${computerSelection}`
-    }
+        playerScore += 1
+        result = ('You win! ' + playerSelection + ' beats ' + computerSelection
+        + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
 
-    // If it's not a tie and the player didn't win, the computer wins
-    return `You Lose! ${computerSelection} beats ${playerSelection}`;
-}
-
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-
-    for (let round = 1; round <= 5; round++) {
-        const playerSelection = prompt("Enter your choice (Rock, Paper or Scissors)");
-        const computerSelection = getComputerChoice();
-
-        console.log(`Round ${round}`);
-        console.log(`Player chooses ${playerSelection}`);
-        console.log(`Computer chooses ${computerSelection}`);
-
-        const result = playRound(playerSelection, computerSelection);
-        console.log(result);
-
-        if (result.startsWith("You Win!")) {
-            playerScore++;
-        } else if (result.startsWith("You Lose!")) {
-            computerScore++;
+        if (playerScore == 5) {
+            result += '<br><br>You won the game! Reload the page to play again.'
+            disableButtons()
         }
     }
-   
-    console.log("Game Over")
 
-    if (playerScore > computerScore) {
-        console.log("Congratulations! You win the game!");
-    } else if (playerScore < computerScore) {
-        console.log("You lose the game. Better luck next time!");
-    } else {
-        console.log("It's a tie!");
+    else if (playerSelection == computerSelection) {
+        result = ('It\'s a tie. You both chose ' + playerSelection
+        + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
     }
 
-    console.log(`Final Score - Player - ${playerScore}, Computer - ${computerScore}`)
+    else {
+        computerScore += 1
+        result = ('You lose! ' + computerSelection + ' beats ' + playerSelection
+            + "<br><br>Player score: " + playerScore + "<br>Computer score: " + computerScore)
+        
+        if (computerScore == 5) {
+            result += '<br><br>You lose, better luck next time! Reload the page to play again.'
+            disableButtons()
+        }
+    }
+
+    document.getElementById('result').innerHTML = result
+}
+
+function disableButtons() {
+    buttons.forEach(elem => elem.disabled = true)
 }
